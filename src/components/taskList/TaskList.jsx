@@ -13,6 +13,15 @@ const TaskList = ({ task, getTask }) => {
     getTask();
   };
 
+  const toggleTask = async (item) => {
+    const url = "http://127.0.0.1:8000/todomvs/";
+    try {
+      await axios.put(`${url}${item.id}/`, { ...item, is_done: !item.is_done });
+    } catch (error) {
+      console.log(error);
+    }
+    getTask();
+  };
   return (
     <div>
       {task.map((item) => {
@@ -21,6 +30,7 @@ const TaskList = ({ task, getTask }) => {
           <div
             key={id}
             className="mt-2 d-flex justify-content-between bg-secondary rounded-2 p-2"
+            onDoubleClick={() => toggleTask(item)}
           >
             <div>
               <h4>{task}</h4>
