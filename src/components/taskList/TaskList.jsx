@@ -16,6 +16,7 @@ const TaskList = ({ task, getTask }) => {
   const toggleTask = async (item) => {
     const url = "http://127.0.0.1:8000/todomvs/";
     try {
+      // await axios.patch(`${url}${item.id}/`, { is_done: !item.is_done }); veya put ile
       await axios.put(`${url}${item.id}/`, { ...item, is_done: !item.is_done });
     } catch (error) {
       console.log(error);
@@ -25,17 +26,25 @@ const TaskList = ({ task, getTask }) => {
   return (
     <div>
       {task.map((item) => {
-        const { id, task, date } = item;
+        const { id, task, created_date } = item;
         return (
           <div
             key={id}
             className="mt-2 d-flex justify-content-between bg-secondary rounded-2 p-2"
             onDoubleClick={() => toggleTask(item)}
+            role="button"
           >
-            <div>
-              <h4>{task}</h4>
-              <p>{date}</p>
-            </div>
+            {item.is_done ? (
+              <div className="text-decoration-line-through">
+                <h4>{task}</h4>
+                <p>{new Date(created_date).toLocaleString()}</p>
+              </div>
+            ) : (
+              <div>
+                <h4>{task}</h4>
+                <p>{new Date(created_date).toLocaleString()}</p>
+              </div>
+            )}
             <div>
               <RiDeleteBack2Fill
                 onClick={() => deleteTask(id)}
